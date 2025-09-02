@@ -1,0 +1,174 @@
+/* src/App.css */
+
+/* --- General Styles & Variables --- */
+:root {
+  --primary-color: #5b21b6; /* A deep violet */
+  --secondary-color: #9d50bb;
+  --background-color: #f8f9fa;
+  --text-color: #343a40;
+  --card-bg-color: #ffffff;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+  --border-radius: 12px;
+}
+
+body {
+  font-family: 'Poppins', sans-serif; /* Using our new font */
+  background-color: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+}
+
+.App {
+  text-align: center;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+/* --- Header --- */
+.App-header {
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  padding: 40px 20px;
+  color: white;
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+}
+
+.App-header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+.App-header p {
+  opacity: 0.9;
+  margin-top: 10px;
+}
+
+/* --- Buttons & Inputs (Shared Styles) --- */
+textarea,
+input[type="text"] {
+  width: 100%;
+  padding: 15px;
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  border-radius: var(--border-radius);
+  border: 1px solid #dee2e6;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+textarea:focus,
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(91, 33, 182, 0.2);
+}
+
+button {
+  padding: 15px 25px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 7px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* --- Card Styles (Resume & Chat) --- */
+.resume-viewer,
+.chat-section,
+.prompt-section {
+  background-color: var(--card-bg-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 30px;
+}
+
+/* --- Prompt Section --- */
+.prompt-section {
+  max-width: 700px;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* --- Main Content Layout (Resume + Chat) --- */
+.main-content {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.resume-viewer {
+  flex: 2;
+  text-align: left;
+}
+
+.controls {
+  margin-bottom: 20px;
+  text-align: right;
+}
+
+.chat-section {
+  flex: 1;
+  position: sticky; /* Makes chat box stay in place on scroll */
+  top: 40px;
+}
+
+.chat-box {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.chat-box input {
+  padding: 15px; /* Increase padding for chat input */
+}
+
+/* --- New Animated Loader --- */
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+  font-size: 1.2rem;
+  color: var(--primary-color);
+}
+
+.loader::before {
+  content: '';
+  box-sizing: border-box;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 5px solid rgba(91, 33, 182, 0.2);
+  border-top-color: var(--primary-color);
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* --- The actual resume content styling from AI --- */
+#resume-to-print {
+  /* You can add styles here to override the AI's inline styles if needed */
+  /* For example: */
+  /* line-height: 1.6; */
+}
