@@ -1,23 +1,18 @@
-// server.js
 const express = require('express');
 const Groq = require('groq-sdk');
 const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const port = 5001; // Port for our backend server
+// No port needed when deploying to Vercel
 
-// Initialize Groq client
 const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY
 });
 
-// Middlewares
-app.use(cors()); // Allows our frontend to make requests to our backend
-app.use(express.json()); // Allows server to understand JSON data from requests
+app.use(cors());
+app.use(express.json());
 
-// --- The System Prompt ---
-// This is our secret sauce. It tells the LLM exactly what we want.
 const systemPrompt = `
 You are an expert resume builder. Your task is to generate and update a professional resume based on user requests.
 - The output MUST be a single block of clean, well-formatted HTML.
@@ -27,20 +22,17 @@ You are an expert resume builder. Your task is to generate and update a professi
 - When the user asks for an update, take the previous HTML and their request, and return the FULL, NEW HTML of the resume.
 `;
 
-// --- API Endpoints ---
-
-// 1. Endpoint to GENERATE the initial resume
-app.post('/generate', async (req, res) => {
+app.post('/api/generate', async (req, res) => { // CHANGED: Added /api prefix
     try {
         const { prompt } = req.body;
-        console.log("Generating initial resume with prompt:", prompt);
+        console.log("Generating initial resume...");
 
         const chatCompletion = await groq.chat.completions.create({
             messages: [
                 { role: "system", content: systemPrompt },
                 { role: "user", content: `Generate a resume based on this information: ${prompt}` }
             ],
-            model: "meta-llama/llama-4-scout-17b-16e-instruct", // You can use other models like llama3-70b-8192
+            model: "llama3-70b-8192",
         });
 
         const resumeHtml = chatCompletion.choices[0]?.message?.content || "";
@@ -52,11 +44,10 @@ app.post('/generate', async (req, res) => {
     }
 });
 
-// 2. Endpoint to CHAT and edit the resume
-app.post('/chat', async (req, res) => {
+app.post('/api/chat', async (req, res) => { // CHANGED: Added /api prefix
     try {
         const { currentHtml, message } = req.body;
-        console.log("Updating resume with message:", message);
+        console.log("Updating resume...");
 
         const chatCompletion = await groq.chat.completions.create({
             messages: [
@@ -66,7 +57,7 @@ app.post('/chat', async (req, res) => {
                     content: `Here is the current resume HTML: \n\n${currentHtml}\n\nPlease update it based on this instruction: "${message}"`
                 }
             ],
-            model: "meta-llama/llama-4-scout-17b-16e-instruct",
+            model: "llama3-70b-8192",
         });
 
         const updatedHtml = chatCompletion.choices[0]?.message?.content || "";
@@ -78,6 +69,5 @@ app.post('/chat', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`🚀 Server running on http://localhost:${port}`);
-});
+// This allows Vercel to handle the server logic
+module.exports = app;
