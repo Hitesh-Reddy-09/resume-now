@@ -16,7 +16,7 @@ function App() {
     }
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:5001/generate', {
+      const response = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt }),
@@ -37,7 +37,7 @@ function App() {
     }
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:5001/chat', {
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
