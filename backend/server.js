@@ -4,7 +4,6 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-// No port needed when deploying to Vercel
 
 const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY
@@ -22,11 +21,11 @@ You are an expert resume builder. Your task is to generate and update a professi
 - When the user asks for an update, take the previous HTML and their request, and return the FULL, NEW HTML of the resume.
 `;
 
-app.post('/api/generate', async (req, res) => { // CHANGED: Added /api prefix
+// CORRECTED: Routes do NOT have the /api prefix
+app.post('/generate', async (req, res) => { 
     try {
         const { prompt } = req.body;
         console.log("Generating initial resume...");
-
         const chatCompletion = await groq.chat.completions.create({
             messages: [
                 { role: "system", content: systemPrompt },
@@ -34,21 +33,19 @@ app.post('/api/generate', async (req, res) => { // CHANGED: Added /api prefix
             ],
             model: "llama3-70b-8192",
         });
-
         const resumeHtml = chatCompletion.choices[0]?.message?.content || "";
         res.json({ html: resumeHtml });
-
     } catch (error) {
         console.error("Error generating resume:", error);
         res.status(500).send("Failed to generate resume.");
     }
 });
 
-app.post('/api/chat', async (req, res) => { // CHANGED: Added /api prefix
+// CORRECTED: Routes do NOT have the /api prefix
+app.post('/chat', async (req, res) => { 
     try {
         const { currentHtml, message } = req.body;
         console.log("Updating resume...");
-
         const chatCompletion = await groq.chat.completions.create({
             messages: [
                 { role: "system", content: systemPrompt },
@@ -59,10 +56,8 @@ app.post('/api/chat', async (req, res) => { // CHANGED: Added /api prefix
             ],
             model: "llama3-70b-8192",
         });
-
         const updatedHtml = chatCompletion.choices[0]?.message?.content || "";
         res.json({ html: updatedHtml });
-
     } catch (error) {
         console.error("Error updating resume:", error);
         res.status(500).send("Failed to update resume.");
